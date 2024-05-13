@@ -1,0 +1,56 @@
+- hosts: all
+  tasks: 
+  - name: install packages
+    apt:
+      name: 
+        - apache2
+        - git
+        - tree
+      state: latest
+
+  - name: Start apache
+    service:
+      name: apache2
+      state: started
+      enabled: yes
+
+  - name: Create group kaizen
+    group:
+      name: kaizen
+      state: present
+
+  - name: Create group devops
+    group:
+      name: devops
+      state: present
+
+  - name: Create group qa
+    group:
+      name: qa
+      state: present
+
+  - name: Add user asyl and add to kaizen 
+    user:
+      name: asyl
+      group: kaizen
+      append: yes 
+
+  - name: Add user asyl and add to qa 
+    user:
+      name: asyl
+      group: qa
+      append: yes 
+               
+  - name: Add user tester and add to qa 
+    user:
+      name: tester
+      group: qa
+      append: yes   
+
+  - name: Copy files from Homework1 to a remote machine's root user's home folder
+    copy:
+      src: "./"
+      dest: /root/  
+
+
+    

@@ -1,0 +1,13 @@
+- name: Install Apache
+  ansible.builtin.yum:
+    name: "{{ package }}"
+    state: latest
+
+- name: Enable Apache
+  ansible.builtin.service:
+    name: "{{ package }}"
+    state: started
+    enabled: yes
+
+
+
