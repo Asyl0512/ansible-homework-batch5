@@ -10,20 +10,19 @@
     state: started
     enabled: yes
 
-- name: Create database
-  shell: mysql -e "CREATE DATABASE IF NOT EXISTS "{{ db_name }}";"
+- name: Create a new database with name 'bobdata'
+  community.mysql.mysql_db:
+    login_user: ansible
+    login_password: new_password
+    name: "{{ db_name }}"
+    state: present
 
-- name: Check user
-  shell: mysql -e "select 1 from mysql.user where user = '{{ db_user }}';" | grep 1
-  register: check_user
-  ignore_errors: yes
-
-- name: Create user
-  shell: mysql -e "CREATE USER {{ db_user }}@localhost IDENTIFIED BY '{{ db_password }}';"
-  when: check_user.rc != 0
-
-- name: Grant access
-  shell: mysql -e "GRANT ALL PRIVILEGES ON {{ db_name }}.* TO {{ db_user }}@localhost IDENTIFIED BY '{{ db_password }}';"
-
-- name: Flush
-  shell: mysql -e "FLUSH PRIVILEGES;"
+- name: Create database user with name 'bob' and password '12345' with all database privileges
+  community.mysql.mysql_user:
+    login_user: ansible
+    login_password: new_password
+    name: "{{ db_user }}"
+    password: "{{ db_password }}"
+    priv: '*.*:ALL'
+    state: present
+    column_case_sensitive: false
